@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        
+      - name: Set up Git
+        run: |
+          git config user.name "lkccoatings"
+          git config user.email "lkccoatings@gmail.com"
 
       - name: Setup Node.js
         uses: actions/setup-node@v2
