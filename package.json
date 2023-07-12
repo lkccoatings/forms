@@ -1,5 +1,6 @@
 {
   "name": "forms",
+  "home": "https://lkccoatings.github.io/forms/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
