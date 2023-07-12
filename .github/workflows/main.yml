@@ -25,13 +25,7 @@ jobs:
         env:
           CI: false
         run: npm run build  # Replace with your build command
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: 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
-          publish_dir: ./build
-          
+      
       - name: Push changes
         run: |
           git config user.name "lkccoatings"
@@ -39,3 +33,9 @@ jobs:
           git push origin gh-pages --quiet
         env:
           ACCESS_TOKEN: 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
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: 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
+          publish_dir: ./build
