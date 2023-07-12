@@ -1,16 +1,16 @@
-name: Build and Deploy to GitHub Pages
+name: Build and Deploy
 
 on:
   push:
     branches:
-      - main
+      - main # Replace with your branch name
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Setup Node.js
@@ -18,19 +18,13 @@ jobs:
         with:
           node-version: 16
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: npm install
 
-      - name: Build website
+      - name: Build React App
         env:
           CI: false
-        run: npm run build  # Replace with your build command
-      
-      - name: Push changes
-        run: |
-          git push origin gh-pages --quiet
-        env:
-          ACCESS_TOKEN: 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
+        run: npm run build 
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
