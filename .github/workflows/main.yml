@@ -31,4 +31,5 @@ jobs:
         env:
           GITHUB_TOKEN: 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
         with:
+          github_token: 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
           publish_dir: ./build
