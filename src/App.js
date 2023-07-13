@@ -19,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Login />} />
+        <Route path='/forms' element={<Login />} />
         <Route path='/form' element={<Form />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/rec' element={<Records />} />
