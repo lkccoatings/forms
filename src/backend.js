@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  orderBy,
 } from "@firebase/firestore";
 
 // Initialize Firebase
@@ -61,8 +62,9 @@ export const getOrderData1 = async () => {
   // const currentDate = new Date().toLocaleDateString();
   // const modifiedDate = currentDate.replace(/\//g, "-");
   const ref = collection(firestore, "Orders");
+  const queryRef = query(ref, orderBy("timestamp", "desc"));
   // const dataQuery = query(ref, where("date", "==", modifiedDate));
-  const docs = await getDocs(ref);
+  const docs = await getDocs(queryRef);
   var arr = [];
   docs.forEach((doc) => {
     arr.push(doc.data());
@@ -105,6 +107,25 @@ export const saveFormData = (
     })
     .catch((error) => {
       console.error("Error saving form data:", error);
+      return 0;
+    });
+};
+
+export const saveFormData1 = (customerName, address, keyword, id) => {
+  const ref = collection(firestore, "Customers");
+  addDoc(ref, {
+    "Customer Name": id + " - " + customerName + " - " + keyword,
+    Address: address,
+    keyword: keyword,
+    "Customer ID": id,
+    timestamp: Date(),
+  })
+    .then(() => {
+      console.error("Customer saved successfully");
+      return 1;
+    })
+    .catch((error) => {
+      console.error("Error saving customer data:", error);
       return 0;
     });
 };

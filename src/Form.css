@@ -8,6 +8,12 @@
     overflow-x: hidden;
 }
 
+.centers{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .form-title {
     margin-bottom: 20px;
     font-size: 24px;

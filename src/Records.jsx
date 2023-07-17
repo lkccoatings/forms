@@ -6,13 +6,35 @@ import { getOrderData1 } from "./backend";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Modal1 from "./Modal1";
-import './Modal1.css';
+import "./Modal1.css";
+import './search.css';
 
 const Records = () => {
   const [data, SetData] = useState([]);
   const [m, Sm] = useState({});
   const [sl, Setsl] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value;
+    setSearchTerm(searchTerm);
+    if (searchTerm.length > 0) {
+      const filteredResults = data.filter(
+        (item) =>
+          item["Sales person"]?item["Sales person"]:""
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          item["Customer Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item["date"].toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      console.log(filteredResults);
+      setSearchResults(filteredResults);
+    } else {
+      setSearchResults(data);
+    }
+  };
 
   const nav = useNavigate();
 
@@ -26,6 +48,7 @@ const Records = () => {
     async function getorders() {
       var res = await getOrderData1();
       SetData(res);
+      setSearchResults(res);
     }
     getorders();
     getKey();
@@ -77,10 +100,17 @@ const Records = () => {
         <h1 className='form-title'>All Orders</h1>
         <div
           style={{
-            width: "30%",
+            width: "50%",
             display: "flex",
-            alignItems: "center",
+            alignItems: "baseline",
           }}>
+          <input
+            type='text'
+            placeholder='Search...'
+            className='search-input'
+            value={searchTerm}
+            onChange={handleSearch}
+          />
           <button
             style={{
               backgroundColor: "orange",
@@ -88,7 +118,7 @@ const Records = () => {
             }}
             className='add-button'
             onClick={() => nav("/admin", { replace: true })}>
-            Daily Records
+            Daily Orders
           </button>
           <button className='add-button' onClick={() => nav("/form")}>
             Add
@@ -101,26 +131,32 @@ const Records = () => {
             <tr>
               <th>Timestamp</th>
               <th>Customer Name</th>
-              <th>Discount</th>
               <th>Total</th>
-              <th>Discount Amount</th>
               <th>Grand Total</th>
+              <th>Date</th>
+              <th>Sales Person</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
-            {data.map((row, index) => (
+            {searchResults.map((row, index) => (
               <tr key={index}>
                 <td>
                   {row["timestamp"] ? row["timestamp"].split("GMT")[0] : ""}
                 </td>
                 <td>{row["Customer Name"] ? row["Customer Name"] : ""}</td>
-                <td>{row["Discount"] ? row["Discount"] : ""}</td>
                 <td>{row["Total"] ? row["Total"] : ""}</td>
-                <td>{row["Discount Amount"] ? row["Discount Amount"] : ""}</td>
                 <td>{row["Grand Total"] ? row["Grand Total"] : ""}</td>
+                <td>{row["date"] ? row["date"] : ""}</td>
+                <td>{row["Sales person"] ? row["Sales person"] : ""}</td>
                 <td>
-                  <RiEyeFill size={25} className='delete-icon' onClick={()=>{openModal(row);}}/>
+                  <RiEyeFill
+                    size={25}
+                    className='delete-icon'
+                    onClick={() => {
+                      openModal(row);
+                    }}
+                  />
                 </td>
               </tr>
             ))}
@@ -129,8 +165,8 @@ const Records = () => {
       </div>
     </div>
   ) : (
-    <h1>No Access</h1>
+    <h1>No Access {nav("/")}</h1>
   );
-}
+};
 
-export default Records
+export default Records;

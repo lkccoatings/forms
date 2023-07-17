@@ -80,23 +80,33 @@ const Admin = () => {
         <h1 className='form-title'>Daily Orders</h1>
         <div
           style={{
-            width: "30%",
+            // backgroundColor:"red",
+            width: "50%",
             display: "flex",
-            alignItems: "center",
+            // alignItems: "center",
           }}>
           <button
             style={{
               backgroundColor: "orange",
-              marginRight: "2%",
+              // marginRight: "2%",
             }}
             className='add-button'
             onClick={() => nav("/rec")}>
-            All Records
+            All Orders
           </button>
           <button
             className='add-button'
-            onClick={() => nav("/form", { replace: true })}>
-            Add
+            onClick={() => nav("/form")}>
+            Add Order
+          </button>
+          <button
+            style={{
+              backgroundColor:"blue",
+              // marginRight: "2%",
+            }}
+            className='add-button'
+            onClick={() => nav("/cust")}>
+            Add Customer
           </button>
         </div>
       </div>
@@ -141,7 +151,7 @@ const Admin = () => {
       </div>
     </div>
   ) : (
-    <h1>No Access</h1>
+      <h1>No Access { nav('/') }</h1>
   );
 };
 

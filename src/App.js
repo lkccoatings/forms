@@ -4,6 +4,7 @@ import Form from "./Form";
 import Login from "./Login";
 import { Routes, Route, HashRouter } from "react-router-dom";
 import Records from "./Records";
+import Customer from "./Customer";
 
 function App() {
 
@@ -18,12 +19,13 @@ function App() {
 
   // basename={process.env.PUBLIC_URL}
   return (
-    <HashRouter >
+    <HashRouter>
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/form' element={<Form />} />
         <Route path='/admin' element={<Admin />} />
         <Route path='/rec' element={<Records />} />
+        <Route path='/cust' element={<Customer />} />
       </Routes>
     </HashRouter>
   );

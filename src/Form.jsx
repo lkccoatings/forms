@@ -4,8 +4,11 @@ import Select from 'react-select';
 import { getCustomers, getProducts, saveFormData } from './backend.js';
 import { AiFillPlusCircle, AiFillMinusCircle } from 'react-icons/ai';
 import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Form = () => {
+
+    const nav = useNavigate();
 
     const [m, Sm] = useState({});
     const [name, Setname] = useState('');
@@ -127,7 +130,6 @@ const Form = () => {
     };
 
     const handleSubmit = (event) => {
-        event.preventDefault();
         saveFormData(customer, address, products, discount, total, dtotal, gtotal, name);
         setCustomer('');
         setAddress('');
@@ -208,6 +210,7 @@ const Form = () => {
                                     />
                                 </div>
                                 <input
+                                    min={"0"}
                                     type="number"
                                     placeholder='Quantity'
                                     className="product-input1"
@@ -238,6 +241,7 @@ const Form = () => {
                         <p>Discount</p>
                         <input
                             type="number"
+                            min="0"
                             className="product-input2"
                             placeholder='%'
                             value={discount}
@@ -259,7 +263,7 @@ const Form = () => {
                 </div>
             </form>
         </div>
-    ):<h1>No Access</h1>;
+    ) : <h1>No Access { nav('/') }</h1>;
 };
 
 export default Form;
