@@ -16,8 +16,9 @@ function App() {
     }
   });
 
+  // basename={process.env.PUBLIC_URL}
   return (
-    <HashRouter basename={process.env.PUBLIC_URL}>
+    <HashRouter >
       <Routes>
         <Route path='/' element={<Login />} />
         <Route path='/form' element={<Form />} />
