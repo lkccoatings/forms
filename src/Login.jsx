@@ -41,6 +41,10 @@ function Login() {
             nav();
           }, 2000);
         }
+        localStorage.setItem(
+          "name",
+          JSON.stringify({ name:email })
+        );
         toast.success("Login Successful!");
       })
       .catch((error) => {

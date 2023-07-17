@@ -66,8 +66,9 @@ const Admin = () => {
         isOpen={modalIsOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
-      ><Modal1 data={sl}/></Modal>
+        contentLabel='Example Modal'>
+        <Modal1 data={sl} />
+      </Modal>
       <h1>LKC COATINGS PVT LTD</h1>
       <div
         style={{
@@ -109,7 +110,7 @@ const Admin = () => {
               <th>Total</th>
               <th>Discount Amount</th>
               <th>Grand Total</th>
-              <th></th>
+              <th>Sales person</th>
             </tr>
           </thead>
           <tbody>
@@ -123,8 +124,15 @@ const Admin = () => {
                 <td>{row["Total"] ? row["Total"] : ""}</td>
                 <td>{row["Discount Amount"] ? row["Discount Amount"] : ""}</td>
                 <td>{row["Grand Total"] ? row["Grand Total"] : ""}</td>
+                <td>{row["Sales person"] ? row["Sales person"] : ""}</td>
                 <td>
-                  <RiEyeFill size={25} className='delete-icon' onClick={()=>{openModal(row);}}/>
+                  <RiEyeFill
+                    size={25}
+                    className='delete-icon'
+                    onClick={() => {
+                      openModal(row);
+                    }}
+                  />
                 </td>
               </tr>
             ))}

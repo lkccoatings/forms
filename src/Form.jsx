@@ -8,6 +8,7 @@ import toast, { Toaster } from 'react-hot-toast';
 const Form = () => {
 
     const [m, Sm] = useState({});
+    const [name, Setname] = useState('');
     const [customer, setCustomer] = useState('');
     const [address, setAddress] = useState('');
     const [discount, setDiscount] = useState('');
@@ -24,8 +25,11 @@ const Form = () => {
     useEffect(() => {
         function getKey() {
           const id = localStorage.getItem("key");
-          const data = id ? JSON.parse(id) : "";
-          Sm(data.id);
+            const data = id ? JSON.parse(id) : "";
+            const id1 = localStorage.getItem("name");
+            const data1 = id1 ? JSON.parse(id1) : "";
+            Sm(data.id);
+            Setname(data1.name);
         }
         async function fetchOptions() {
             setIsLoading(true);
@@ -124,7 +128,14 @@ const Form = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        saveFormData(customer, address, products, discount, total, dtotal, gtotal);
+        saveFormData(customer, address, products, discount, total, dtotal, gtotal, name);
+        setCustomer('');
+        setAddress('');
+        setProducts([{ name: "", qty: 0, price: 0, amount: 0 }]);
+        setDiscount('');
+        setDTotal('');
+        setGTotal('');
+        setTotal('');
         toast.success("Order created successfully!");
         // Handle form submission logic here
     };
