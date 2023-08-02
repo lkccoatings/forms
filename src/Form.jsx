@@ -196,7 +196,6 @@ const Form = () => {
                     </div>
                     {products.map((product, index) => (
                         <div key={index} className="product-field">
-
                             <div style={{width:"100%", display: "flex", alignItems: "center", justifyContent:"space-between",marginBottom: "10px" }}>
                                 <div className='select'>
                                     <Select

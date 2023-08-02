@@ -45,7 +45,7 @@ export const getProducts = async () => {
 };
 
 export const getOrderData = async () => {
-  const currentDate = new Date().toLocaleDateString();
+  const currentDate = new Date().toLocaleDateString("en-GB");
   const modifiedDate = currentDate.replace(/\//g, "-");
   const ref = collection(firestore, "Orders");
   const dataQuery = query(ref, where("date", "==", modifiedDate));
@@ -59,7 +59,7 @@ export const getOrderData = async () => {
 };
 
 export const getOrderData1 = async () => {
-  // const currentDate = new Date().toLocaleDateString();
+  // const currentDate = new Date().toLocaleDateString("en-GB");
   // const modifiedDate = currentDate.replace(/\//g, "-");
   const ref = collection(firestore, "Orders");
   const queryRef = query(ref, orderBy("timestamp", "desc"));
@@ -84,18 +84,18 @@ export const saveFormData = (
   name
 ) => {
   const ref = collection(firestore, "Orders");
-  const currentDate = new Date().toLocaleDateString();
+  const currentDate = new Date().toLocaleDateString("en-GB");
   const modifiedDate = currentDate.replace(/\//g, "-");
-  console.log(customerName);
-  console.log(address);
-  console.log(products);
+  // console.log(customerName);
+  // console.log(address);
+  // console.log(products);
   addDoc(ref, {
     "Customer Name": customerName,
     Discount: discount,
     Total: total,
     "Discount Amount": dtotal,
     "Grand Total": gtotal,
-    Address: address,
+    Address: address?address:"",
     Products: products,
     timestamp: Date(),
     date: modifiedDate,
