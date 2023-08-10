@@ -7,9 +7,14 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Modal1 from "./Modal1";
 import "./Modal1.css";
-import './search.css';
+import "./search.css";
+import { useUserContext } from "./services/Usercontext";
 
 const Records = () => {
+  const { state, dispatch } = useUserContext();
+  const { ordersdata } = state;
+
+  const [active, Setactive] = useState(true);
   const [data, SetData] = useState([]);
   const [m, Sm] = useState({});
   const [sl, Setsl] = useState({});
@@ -21,13 +26,14 @@ const Records = () => {
     const searchTerm = e.target.value;
     setSearchTerm(searchTerm);
     if (searchTerm.length > 0) {
-      const filteredResults = data.filter(
-        (item) =>
-          item["Sales person"]?item["Sales person"]:""
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase()) ||
-          item["Customer Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item["date"].toLowerCase().includes(searchTerm.toLowerCase())
+      const filteredResults = data.filter((item) =>
+        item["Sales person"]
+          ? item["Sales person"]
+          : "".toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item["Customer Name"]
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase()) ||
+            item["date"].toLowerCase().includes(searchTerm.toLowerCase())
       );
       console.log(filteredResults);
       setSearchResults(filteredResults);
@@ -37,22 +43,48 @@ const Records = () => {
   };
 
   const nav = useNavigate();
+  // nav(0);
+
+  function getKey() {
+    const id = localStorage.getItem("key");
+    const data = id ? JSON.parse(id) : "";
+    Sm(data.con);
+  }
+
+  async function getorders() {
+    var res = await getOrderData1();
+    dispatch({
+      type: "SET_ORDER_DATA",
+      payload: res,
+    });
+    localStorage.setItem("ordersdata", btoa(JSON.stringify(res)));
+    SetData(res);
+    setSearchResults(res);
+  }
+
+  const fetchData = () => {
+    if (!ordersdata) {
+      const localdata = localStorage.getItem("ordersdata");
+      if (localdata) {
+        console.log("Local Data1");
+        const decodedData = atob(localdata);
+        SetData(JSON.parse(decodedData));
+        setSearchResults(JSON.parse(decodedData));
+        dispatch({
+          type: "SET_ORDER_DATA",
+          payload: JSON.parse(decodedData),
+        });
+      } else {
+        console.log("API Data1");
+        getorders();
+      }
+    }
+  };
 
   useEffect(() => {
-    function getKey() {
-      const id = localStorage.getItem("key");
-      const data = id ? JSON.parse(id) : "";
-      Sm(data.con);
-    }
-
-    async function getorders() {
-      var res = await getOrderData1();
-      SetData(res);
-      setSearchResults(res);
-    }
-    getorders();
     getKey();
-  }, []);
+    fetchData();
+  }, [dispatch, ordersdata]);
 
   const sortedData = data.sort((a, b) => {
     const timestampA = new Date(a.timestamp).getTime();
@@ -80,6 +112,15 @@ const Records = () => {
     setIsOpen(false);
   }
 
+  const [itemsPerPage, setItemsPerPage] = useState(10); // Number of items to display per page
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // Calculate the indices for the current page
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const visibleResults = searchResults.slice(startIndex, endIndex);
+
   return m ? (
     <div className='table'>
       <Modal
@@ -97,10 +138,31 @@ const Records = () => {
           justifyContent: "space-between",
           width: "80%",
         }}>
-        <h1 className='form-title'>All Orders</h1>
+        <div style={{ display: "flex", width: "30%" }}>
+          <button
+            style={{
+              // backgroundColor: "orange",
+              // marginRight: "2%",
+              borderRadius: "10px 0px 0px 10px",
+            }}
+            className={active ? "add-button1" : "add-button"}
+            onClick={() => nav("/admin", { replace: true })}>
+            Daily Orders
+          </button>
+          <button
+            style={{
+              // backgroundColor: "orange",
+              // marginRight: "2%",
+              borderRadius: "0px 10px 10px 0px",
+            }}
+            className={active ? "add-button" : "add-button1"}
+            onClick={() => nav("/rec")}>
+            All Orders
+          </button>
+        </div>
         <div
           style={{
-            width: "50%",
+            width: "60%",
             display: "flex",
             alignItems: "baseline",
           }}>
@@ -112,18 +174,39 @@ const Records = () => {
             onChange={handleSearch}
           />
           <button
+            className='add-button'
+            onClick={() => nav("/form")}
             style={{
-              backgroundColor: "orange",
-              marginRight: "2%",
+              backgroundColor: "beige",
+              color: "black",
+              border: "0.5px solid black",
+              borderRadius: "6px 0px 0px 6px",
+            }}>
+            Order +
+          </button>
+          <button
+            style={{
+              backgroundColor: "lightblue",
+              color: "black",
+              // marginRight: "2%",
+              border: "0.5px solid black",
+              borderRadius: "0px 6px 6px 0px",
             }}
             className='add-button'
-            onClick={() => nav("/admin", { replace: true })}>
-            Daily Orders
-          </button>
-          <button className='add-button' onClick={() => nav("/form")}>
-            Add
+            onClick={() => nav("/cust")}>
+            Customer 👤 +
           </button>
         </div>
+      </div>
+      <div className='items-per-page'>
+        <label>Show items per page: </label>
+        <select
+          value={itemsPerPage}
+          onChange={(e) => setItemsPerPage(parseInt(e.target.value))}>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+          <option value={50}>50</option>
+        </select>
       </div>
       <div className='r_main'>
         <table className='custom-table'>
@@ -139,7 +222,7 @@ const Records = () => {
             </tr>
           </thead>
           <tbody>
-            {searchResults.map((row, index) => (
+            {visibleResults.map((row, index) => (
               <tr key={index}>
                 <td>
                   {row["timestamp"] ? row["timestamp"].split("GMT")[0] : ""}
@@ -162,6 +245,19 @@ const Records = () => {
             ))}
           </tbody>
         </table>
+      </div>
+      <div className='pagination'>
+        <button
+          onClick={() => setCurrentPage(currentPage - 1)}
+          disabled={currentPage === 1}>
+          Previous
+        </button>
+        <span>{currentPage}</span>
+        <button
+          onClick={() => setCurrentPage(currentPage + 1)}
+          disabled={endIndex >= searchResults.length}>
+          Next
+        </button>
       </div>
     </div>
   ) : (

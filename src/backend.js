@@ -95,19 +95,19 @@ export const saveFormData = (
     Total: total,
     "Discount Amount": dtotal,
     "Grand Total": gtotal,
-    Address: address?address:"",
+    Address: address ? address : "",
     Products: products,
     timestamp: Date(),
     date: modifiedDate,
     "Sales person": name,
   })
-    .then(() => {
-      console.error("Form data saved successfully");
-      return 1;
+    .then((res) => {
+      console.log("Form data saved successfully");
+      return res;
     })
     .catch((error) => {
       console.error("Error saving form data:", error);
-      return 0;
+      return error;
     });
 };
 
@@ -120,12 +120,12 @@ export const saveFormData1 = (customerName, address, keyword, id) => {
     "Customer ID": id,
     timestamp: Date(),
   })
-    .then(() => {
+    .then((res) => {
       console.error("Customer saved successfully");
-      return 1;
+      return res;
     })
     .catch((error) => {
       console.error("Error saving customer data:", error);
-      return 0;
+      return error;
     });
 };

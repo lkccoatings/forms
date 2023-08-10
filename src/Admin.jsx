@@ -12,14 +12,15 @@ const Admin = () => {
   const [m, Sm] = useState({});
   const [sl, Setsl] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [active, Setactive] = useState(false);
 
   const nav = useNavigate();
 
   useEffect(() => {
-   function getKey(){
-        const id = localStorage.getItem("key");
-        const data = id ? JSON.parse(id) : "";
-        Sm(data.con);
+    function getKey() {
+      const id = localStorage.getItem("key");
+      const data = id ? JSON.parse(id) : "";
+      Sm(data.con);
     }
 
     async function getorders() {
@@ -50,7 +51,6 @@ const Admin = () => {
   function openModal(row) {
     Setsl(row);
     setIsOpen(true);
-    
   }
 
   function closeModal() {
@@ -58,7 +58,6 @@ const Admin = () => {
   }
 
   //fe
-
 
   return m ? (
     <div className='table'>
@@ -77,36 +76,55 @@ const Admin = () => {
           justifyContent: "space-between",
           width: "80%",
         }}>
-        <h1 className='form-title'>Daily Orders</h1>
+        <div style={{ display: "flex", width: "30%" }}>
+          <button
+            style={{
+              borderRadius: "10px 0px 0px 10px",
+            }}
+            className={active ? "add-button1" : "add-button"}
+            onClick={() => nav("/admin", { replace: true })}>
+            Daily Orders
+          </button>
+          <button
+            style={{
+              // backgroundColor: "orange",
+              // marginRight: "2%",
+              borderRadius: "0px 10px 10px 0px",
+            }}
+            className={active ? "add-button" : "add-button1"}
+            onClick={() => nav("/rec")}>
+            All Orders
+          </button>
+        </div>
         <div
           style={{
             // backgroundColor:"red",
-            width: "50%",
+            width: "30%",
             display: "flex",
             // alignItems: "center",
           }}>
           <button
+            className='add-button'
+            onClick={() => nav("/form")}
             style={{
-              backgroundColor: "orange",
-              // marginRight: "2%",
-            }}
-            className='add-button'
-            onClick={() => nav("/rec")}>
-            All Orders
-          </button>
-          <button
-            className='add-button'
-            onClick={() => nav("/form")}>
-            Add Order
+              backgroundColor: "beige",
+              color: "black",
+              border: "0.5px solid black",
+              borderRadius: "6px 0px 0px 6px",
+            }}>
+            Order +
           </button>
           <button
             style={{
-              backgroundColor:"blue",
+              backgroundColor: "lightblue",
+              color: "black",
+              border: "0.5px solid black",
+              borderRadius: "0px 6px 6px 0px",
               // marginRight: "2%",
             }}
             className='add-button'
             onClick={() => nav("/cust")}>
-            Add Customer
+            Customer 👤 +
           </button>
         </div>
       </div>
@@ -151,7 +169,7 @@ const Admin = () => {
       </div>
     </div>
   ) : (
-      <h1>No Access { nav('/') }</h1>
+    <h1>No Access {nav("/")}</h1>
   );
 };
 
