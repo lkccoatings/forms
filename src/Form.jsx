@@ -13,38 +13,38 @@ const Form = () => {
   const { productsdata } = state;
 
   const fetchData = () => {
-        if (!customersdata) {
-          const storedData = localStorage.getItem("customersdata");
-          if (storedData) {
-            console.log("Local Data");
-            const decodedData = atob(storedData);
-            setOptions(JSON.parse(decodedData));
-            dispatch({
-              type: "SET_CUSTOMER_DATA",
-              payload: JSON.parse(decodedData),
-            });
-            setIsLoading(false);
-          } else {
-            console.log("API Data");
-            fetchOptions();
-          }
-        }
-        if (!productsdata) {
-          const storedData = localStorage.getItem("productsdata");
-          if (storedData) {
-            console.log("Local Data");
-            const decodedData = atob(storedData);
-            setOptions1(JSON.parse(decodedData));
-            dispatch({
-              type: "SET_PRODUCT_DATA",
-              payload: JSON.parse(decodedData),
-            });
-          } else {
-            console.log("API Data");
-            fetchOptions1();
-          }
-        }
-  }
+    if (!customersdata) {
+      const storedData = localStorage.getItem("customersdata");
+      if (storedData) {
+        console.log("Local Data");
+        const decodedData = atob(storedData);
+        setOptions(JSON.parse(decodedData));
+        dispatch({
+          type: "SET_CUSTOMER_DATA",
+          payload: JSON.parse(decodedData),
+        });
+        setIsLoading(false);
+      } else {
+        console.log("API Data");
+        fetchOptions();
+      }
+    }
+    if (!productsdata) {
+      const storedData = localStorage.getItem("productsdata");
+      if (storedData) {
+        console.log("Local Data");
+        const decodedData = atob(storedData);
+        setOptions1(JSON.parse(decodedData));
+        dispatch({
+          type: "SET_PRODUCT_DATA",
+          payload: JSON.parse(decodedData),
+        });
+      } else {
+        console.log("API Data");
+        fetchOptions1();
+      }
+    }
+  };
 
   useEffect(() => {
     debugger;
@@ -192,9 +192,24 @@ const Form = () => {
     console.log(products);
   };
 
+  const valid = {
+    Customer: { error: false, message: "" },
+  };
+  const pvalid = {
+    Name: { error: false, message: "" },
+    Qty: { error: false, message: "" },
+  };
+
+  const [_validate, _Setvalidate] = useState(valid);
+  const [_prodvalidate, _Setprodvalidate] = useState(pvalid);
+
   const addProductField = () => {
     setProducts([...products, { name: "", qty: 0, price: 0, amount: 0 }]);
-    _Setprodvalidate([..._prodvalidate, pvalid]);
+    // const val = [];
+    // products.map((ele, index) => {
+    //   val.push(pvalid);
+    // });
+    // _Setprodvalidate(val);
   };
 
   const removeProductField = (index) => {
@@ -208,22 +223,13 @@ const Form = () => {
     });
     setweight(wei);
     setTotal(total);
-    const val = [..._prodvalidate];
-    val.splice(index, 1);
-    _Setprodvalidate(val);
+    // const val = [];
+    // updatedProducts.map((ele, index) => {
+    //   val.push(pvalid);
+    // });
+    // _Setprodvalidate(val);
     setProducts(updatedProducts);
   };
-
-  const valid = {
-    Customer: { error: false, message: "" },
-  };
-  const pvalid = {
-    Name: { error: false, message: "" },
-    Qty: { error: false, message: "" },
-  };
-
-  const [_validate, _Setvalidate] = useState(valid);
-  const [_prodvalidate, _Setprodvalidate] = useState([pvalid]);
 
   const _validateData = () => {
     var valid = true;
@@ -243,13 +249,13 @@ const Form = () => {
     products.map((ele, index) => {
       if (ele.name === "" || ele.name === null) {
         valid = false;
-        obj[index].Name.error = true;
-        obj[index].Name.message = "Required Field";
+        obj.Name.error = true;
+        obj.Name.message = "Required Field";
       }
       if (ele.qty === "" || ele.qty === null || ele.qty === 0) {
         valid = false;
-        obj[index].Qty.error = true;
-        obj[index].Qty.message = "Required Field";
+        obj.Qty.error = true;
+        obj.Qty.message = "Required Field";
       }
     });
     _Setprodvalidate(obj);
@@ -285,7 +291,7 @@ const Form = () => {
     <div className='form-container'>
       <h1>LKC COATINGS PVT LTD</h1>
       <h1 className='form-title'>Sales Orders</h1>
-      <form onSubmit={handleSubmit}>
+      <form>
         <div className='form-section'>
           <label htmlFor='customerName' className='form-label'>
             Customer Name
@@ -340,10 +346,10 @@ const Form = () => {
               marginBottom: "10px",
               justifyContent: "space-between",
             }}>
-            <p style={{ width: "200px" }}>Product Name</p>
-            <p>Qty</p>
-            <p>Weight</p>
-            <p>Amount</p>
+            {/* <p style={{ width: "230px" }}>Product Name</p> */}
+            {/* <p>Qty</p> */}
+            {/* <p>Weight</p> */}
+            {/* <p>Amount</p> */}
           </div>
           {products.map((product, index) => (
             <div key={index} className='product-field'>
@@ -351,11 +357,12 @@ const Form = () => {
                 style={{
                   width: "100%",
                   display: "flex",
-                  alignItems: "center",
+                  alignItems: "baseline",
                   justifyContent: "space-between",
                   marginBottom: "10px",
                 }}>
                 <div className='select'>
+                  <label>Product Name</label>
                   <Select
                     isLoading={isLoading1}
                     options={options1}
@@ -368,12 +375,18 @@ const Form = () => {
                     placeholder='Select Product'
                   />
                   <p style={{ color: "red", fontSize: "10px" }}>
-                    {_prodvalidate[index].Name.error
-                      ? _prodvalidate[index].Name.message
+                    {_prodvalidate?.Name?.error
+                      ? _prodvalidate?.Name?.message
                       : ""}
                   </p>
                 </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}>
+                  <label>Qty</label>
                   <input
                     min={"0"}
                     type='number'
@@ -385,24 +398,48 @@ const Form = () => {
                     }
                   />
                   <p style={{ color: "red", fontSize: "10px" }}>
-                    {_prodvalidate[index].Qty.error
-                      ? _prodvalidate[index].Qty.message
+                    {_prodvalidate?.Qty?.error
+                      ? _prodvalidate?.Qty?.message
                       : ""}
                   </p>
                 </div>
-                {index > 0 ? (
-                  <AiFillMinusCircle
-                    size={30}
-                    className='remove-product-button'
-                    onClick={() => removeProductField(index)}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}>
+                  <label>W 𓍝</label>
+                  <input
+                    // style={{ backgroundColor: "red" }}
+                    value={product.tkg}
+                    className='product-input1'
+                    readOnly
                   />
-                ) : (
-                  <p style={{ paddingRight: "30px" }}></p>
-                )}
-                <p>{product.tkg}</p>
-                <p>{product.price * product.qty}</p>
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                  }}>
+                  <label>Rs</label>
+                  <input
+                    value={product.price * product.qty}
+                    className='product-input1'
+                    readOnly
+                  />
+                </div>
               </div>
-
+              {index > 0 ? (
+                <AiFillMinusCircle
+                  size={30}
+                  className='remove-product-button'
+                  onClick={() => removeProductField(index)}
+                />
+              ) : (
+                <p style={{ paddingRight: "30px" }}></p>
+              )}
               <div
                 style={{
                   height: "1px",
@@ -482,7 +519,10 @@ const Form = () => {
             <p>Grand Total</p>
             <p>{gtotal}</p>
           </div>
-          <button type='submit' className='submit-button'>
+          <button
+            type='button'
+            className='submit-button'
+            onClick={handleSubmit}>
             Submit
           </button>
           <Toaster />
