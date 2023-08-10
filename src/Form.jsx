@@ -12,45 +12,49 @@ const Form = () => {
   const { customersdata } = state;
   const { productsdata } = state;
 
+  const fetchData = () => {
+        if (!customersdata) {
+          const storedData = localStorage.getItem("customersdata");
+          if (storedData) {
+            console.log("Local Data");
+            const decodedData = atob(storedData);
+            setOptions(JSON.parse(decodedData));
+            dispatch({
+              type: "SET_CUSTOMER_DATA",
+              payload: JSON.parse(decodedData),
+            });
+            setIsLoading(false);
+          } else {
+            console.log("API Data");
+            fetchOptions();
+          }
+        }
+        if (!productsdata) {
+          const storedData = localStorage.getItem("productsdata");
+          if (storedData) {
+            console.log("Local Data");
+            const decodedData = atob(storedData);
+            setOptions1(JSON.parse(decodedData));
+            dispatch({
+              type: "SET_PRODUCT_DATA",
+              payload: JSON.parse(decodedData),
+            });
+          } else {
+            console.log("API Data");
+            fetchOptions1();
+          }
+        }
+  }
+
   useEffect(() => {
     debugger;
     // console.log(state);
     // console.log(customersdata);
     getKey();
-    if (!customersdata) {
-      const storedData = localStorage.getItem("customersdata");
-      if (storedData) {
-        console.log("Local Data");
-        const decodedData = atob(storedData);
-        setOptions(JSON.parse(decodedData));
-        dispatch({
-          type: "SET_CUSTOMER_DATA",
-          payload: JSON.parse(decodedData),
-        });
-        setIsLoading(false);
-      } else {
-        console.log("API Data");
-        fetchOptions();
-      }
-    }
-    if (!productsdata) {
-      const storedData = localStorage.getItem("productsdata");
-      if (storedData) {
-        console.log("Local Data");
-        const decodedData = atob(storedData);
-        setOptions1(JSON.parse(decodedData));
-        dispatch({
-          type: "SET_PRODUCT_DATA",
-          payload: JSON.parse(decodedData),
-        });
-      } else {
-        console.log("API Data");
-        fetchOptions1();
-      }
-    }
+    fetchData();
     setIsLoading(false);
     setIsLoading1(false);
-  }, [dispatch, customersdata, productsdata]);
+  }, []);
 
   const nav = useNavigate();
 

@@ -92,7 +92,7 @@ const Admin = () => {
               borderRadius: "0px 10px 10px 0px",
             }}
             className={active ? "add-button" : "add-button1"}
-            onClick={() => nav("/rec")}>
+            onClick={() => { nav("/rec"); nav(0); }}>
             All Orders
           </button>
         </div>
@@ -105,7 +105,7 @@ const Admin = () => {
           }}>
           <button
             className='add-button'
-            onClick={() => nav("/form")}
+            onClick={() => { nav("/form"); nav(0); }}
             style={{
               backgroundColor: "beige",
               color: "black",

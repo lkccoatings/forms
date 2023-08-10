@@ -13,6 +13,7 @@ import { useUserContext } from "./services/Usercontext";
 const Records = () => {
   const { state, dispatch } = useUserContext();
   const { ordersdata } = state;
+  const nav = useNavigate();
 
   const [active, Setactive] = useState(true);
   const [data, SetData] = useState([]);
@@ -42,7 +43,6 @@ const Records = () => {
     }
   };
 
-  const nav = useNavigate();
   // nav(0);
 
   function getKey() {
@@ -61,14 +61,15 @@ const Records = () => {
     SetData(res);
     setSearchResults(res);
   }
-
-  const fetchData = () => {
+  async function fetchData() {
+    getKey();
     if (!ordersdata) {
       const localdata = localStorage.getItem("ordersdata");
       if (localdata) {
         console.log("Local Data1");
         const decodedData = atob(localdata);
         SetData(JSON.parse(decodedData));
+        // console.log(decodedData);
         setSearchResults(JSON.parse(decodedData));
         dispatch({
           type: "SET_ORDER_DATA",
@@ -76,15 +77,14 @@ const Records = () => {
         });
       } else {
         console.log("API Data1");
-        getorders();
+        await getorders();
       }
     }
-  };
+  }
 
   useEffect(() => {
-    getKey();
     fetchData();
-  }, [dispatch, ordersdata]);
+  }, []);
 
   const sortedData = data.sort((a, b) => {
     const timestampA = new Date(a.timestamp).getTime();
@@ -175,7 +175,7 @@ const Records = () => {
           />
           <button
             className='add-button'
-            onClick={() => nav("/form")}
+            onClick={() => { nav("/form"); nav(0);  }}
             style={{
               backgroundColor: "beige",
               color: "black",
