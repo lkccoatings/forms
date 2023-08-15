@@ -30,21 +30,21 @@ function Login() {
           // Save data to cache
           localStorage.setItem(
             "key",
-            JSON.stringify({ con: 1, id: user, time: Date.now()})
+            JSON.stringify({ con: 1, id: user, time: Date.now() })
           );
           setTimeout(() => {
             nav1();
           }, 2000);
         } else {
-          localStorage.setItem("key", JSON.stringify({ con: 0, id: user, time:Date.now()}));
+          localStorage.setItem(
+            "key",
+            JSON.stringify({ con: 0, id: user, time: Date.now() })
+          );
           setTimeout(() => {
             nav();
           }, 2000);
         }
-        localStorage.setItem(
-          "name",
-          JSON.stringify({ name:email })
-        );
+        localStorage.setItem("name", JSON.stringify({ name: email }));
         toast.success("Login Successful!");
       })
       .catch((error) => {
@@ -61,10 +61,10 @@ function Login() {
   };
 
   const nav = () => {
-    navigate("/form");
+    navigate("/form", { replace: true });
   };
   const nav1 = () => {
-    navigate("/admin");
+    navigate("/admin", { replace: true });
   };
 
   return (

@@ -8,6 +8,8 @@ import {
   query,
   where,
   orderBy,
+  doc,
+  setDoc,
 } from "@firebase/firestore";
 
 // Initialize Firebase
@@ -39,7 +41,7 @@ export const getProducts = async () => {
   const docs = await getDocs(ref);
   var arr = [];
   docs.forEach((doc) => {
-    arr.push(doc.data());
+    arr.push({ ...doc.data(), id: doc.id });
   });
   return arr;
 };
@@ -126,6 +128,32 @@ export const saveFormData1 = (customerName, address, keyword, id) => {
     })
     .catch((error) => {
       console.error("Error saving customer data:", error);
+      return error;
+    });
+};
+
+export const updateProduct = (data) => {
+  const docRef = doc(firestore, "Products", data.id);
+  setDoc(docRef, data, { merge: true })
+    .then((res) => {
+      console.error("Product updated successfully");
+      return res;
+    })
+    .catch((error) => {
+      console.error("Error updating product data:", error);
+      return error;
+    });
+};
+
+export const createProduct = (data) => {
+  const ref = collection(firestore, "Products");
+  addDoc(ref, data)
+    .then((res) => {
+      console.error("Product saved successfully");
+      return res;
+    })
+    .catch((error) => {
+      console.error("Error saving product data:", error);
       return error;
     });
 };

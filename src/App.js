@@ -6,6 +6,7 @@ import { Routes, Route, HashRouter } from "react-router-dom";
 import Records from "./Records";
 import Customer from "./Customer";
 import { UserProvider } from "./services/Usercontext";
+import Products from "./Products";
 
 function App() {
   window.addEventListener("unload", () => {
@@ -27,6 +28,7 @@ function App() {
           <Route path='/admin' element={<Admin />} />
           <Route path='/rec' element={<Records />} />
           <Route path='/cust' element={<Customer />} />
+          <Route path='/prod' element={<Products />} />
         </Routes>
       </HashRouter>
     </UserProvider>

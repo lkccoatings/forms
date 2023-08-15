@@ -92,25 +92,44 @@ const Admin = () => {
               borderRadius: "0px 10px 10px 0px",
             }}
             className={active ? "add-button" : "add-button1"}
-            onClick={() => { nav("/rec"); nav(0); }}>
+            onClick={() => {
+              nav("/rec");
+              nav(0);
+            }}>
             All Orders
           </button>
         </div>
         <div
           style={{
             // backgroundColor:"red",
-            width: "30%",
+            width: "40%",
             display: "flex",
             // alignItems: "center",
           }}>
           <button
             className='add-button'
-            onClick={() => { nav("/form"); nav(0); }}
+            onClick={() => {
+              nav("/prod");
+            }}
+            style={{
+              backgroundColor: "lightgreen",
+              color: "black",
+              border: "0.5px solid black",
+              borderRadius: "6px 0px 0px 6px",
+            }}>
+            Products
+          </button>
+          <button
+            className='add-button'
+            onClick={() => {
+              nav("/form");
+              nav(0);
+            }}
             style={{
               backgroundColor: "beige",
               color: "black",
               border: "0.5px solid black",
-              borderRadius: "6px 0px 0px 6px",
+              borderRadius: "0px 0px 0px 0px",
             }}>
             Order +
           </button>
