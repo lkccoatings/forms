@@ -103,12 +103,15 @@ const Form = () => {
   async function fetchOptions1() {
     setIsLoading1(true);
     const res = await getProducts();
+    const id = localStorage.getItem("key");
+    const data = id ? JSON.parse(id) : "";
+    var p = data.data.Price.value;
     const optionsData1 = res.map((doc) => ({
-      value: doc["Price"],
+      value: doc[p],
       label: doc["Product Name"],
       kg: doc["KG"],
     }));
-    // console.log(optionsData1);
+    console.log(optionsData1);
     dispatch({ type: "SET_PRODUCT_DATA", payload: optionsData1 });
     const encodedData = btoa(JSON.stringify(optionsData1));
     localStorage.setItem("productsdata", encodedData);

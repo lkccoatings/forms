@@ -7,12 +7,14 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import Modal2 from "./Modal2";
 import toast, { Toaster } from "react-hot-toast";
+import Modal3 from "./Modal3";
 
 const Products = () => {
   const [data, SetData] = useState([]);
   const [m, Sm] = useState({});
   const [sl, Setsl] = useState({});
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalIsOpen1, setIsOpen1] = useState(false);
   const [active, Setactive] = useState(false);
 
   const nav = useNavigate();
@@ -54,16 +56,25 @@ const Products = () => {
     setIsOpen(true);
   }
 
+  function openModal1() {
+    setIsOpen1(true);
+  }
+
   function closeModal() {
     setIsOpen(false);
+  }
+
+
+  function closeModal1() {
+    setIsOpen1(false);
   }
 
   const handlesubmit = (data) => {
     if (data.id === 0) {
       const d = {
         "Product Name": data["Product Name"],
-        "KG": data["KG"],
-        "Price": data["Price"],
+        KG: data["KG"],
+        Price: data["Price"],
         "Price 1": data["Price 1"],
         "Price 2": data["Price 2"],
       };
@@ -71,9 +82,9 @@ const Products = () => {
       toast.success("Product Created successfull!");
     } else {
       const res = updateProduct(data);
-       toast.success("Product Updated successfull!");
+      toast.success("Product Updated successfull!");
     }
-   
+
     setTimeout(() => {
       nav(0);
     }, 1000);
@@ -89,6 +100,13 @@ const Products = () => {
         style={customStyles}
         contentLabel='Example Modal'>
         <Modal2 data={sl} closeModal={closeModal} handlesubmit={handlesubmit} />
+      </Modal>
+      <Modal
+        isOpen={modalIsOpen1}
+        onRequestClose={closeModal1}
+        style={customStyles}
+        contentLabel='Example Modal'>
+        <Modal3 closeModal={closeModal1}/>
       </Modal>
       <h1>LKC COATINGS PVT LTD</h1>
       <div
@@ -109,6 +127,18 @@ const Products = () => {
             justifyContent: "end",
             // alignItems: "center",
           }}>
+          <button
+            style={{
+              backgroundColor: "lightgreen",
+              color: "black",
+              border: "0.5px solid black",
+              //   borderRadius: "0px 6px 6px 0px",
+              // marginRight: "2%",
+            }}
+            className='add-button'
+            onClick={() => openModal1()}>
+            Assign Price
+          </button>
           <button
             style={{
               backgroundColor: "lightblue",

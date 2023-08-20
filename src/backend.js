@@ -36,12 +36,26 @@ export const getCustomers = async () => {
   });
   return arr;
 };
+
+
 export const getProducts = async () => {
   const ref = collection(firestore, "Products");
-  const docs = await getDocs(ref);
+  const queryRef = query(ref, orderBy("Product Name"));
+  const docs = await getDocs(queryRef);
   var arr = [];
   docs.forEach((doc) => {
     arr.push({ ...doc.data(), id: doc.id });
+  });
+  return arr;
+};
+
+export const getUsers = async () => {
+  const ref = collection(firestore, "Users");
+  const queryRef = query(ref, where("isAdmin","==","false"));
+  const docs = await getDocs(queryRef);
+  var arr = [];
+  docs.forEach((doc) => {
+    arr.push({ ...doc.data(), id:doc.id });
   });
   return arr;
 };
@@ -143,6 +157,22 @@ export const updateProduct = (data) => {
       console.error("Error updating product data:", error);
       return error;
     });
+};
+
+export const updateUserPrice = (data) => {
+  data.forEach((ele) => {
+     const docRef = doc(firestore, "Users", ele.id);
+     setDoc(docRef, ele, { merge: true })
+       .then((res) => {
+         console.error("User Price List updated successfully");
+         return res;
+       })
+       .catch((error) => {
+         console.error("Error updating price data:", error);
+         return error;
+       });
+  })
+ 
 };
 
 export const createProduct = (data) => {

@@ -17,11 +17,13 @@ function Login() {
     signInWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         var res = "false";
+        var data;
         const user = userCredential.user.uid;
         const ref = collection(firestore, "Users");
         const docs = await getDocs(ref);
         docs.forEach((doc) => {
           if (doc.data().uid === user) {
+            data = doc.data();
             res = doc.data()["isAdmin"];
             return;
           }
@@ -30,7 +32,7 @@ function Login() {
           // Save data to cache
           localStorage.setItem(
             "key",
-            JSON.stringify({ con: 1, id: user, time: Date.now() })
+            JSON.stringify({ con: 1, id: user, time: Date.now(), data: data })
           );
           setTimeout(() => {
             nav1();
@@ -38,7 +40,7 @@ function Login() {
         } else {
           localStorage.setItem(
             "key",
-            JSON.stringify({ con: 0, id: user, time: Date.now() })
+            JSON.stringify({ con: 0, id: user, time: Date.now(), data: data })
           );
           setTimeout(() => {
             nav();
